@@ -93,26 +93,28 @@ Forecasts measure disruption impacts, **not equipment-failure probabilities**. T
 
 | Layer | What we use | Why we use it |
 |---|---|---|
+| AI assistant | OpenAI Responses API (`gpt-5.6-luna` by default) | Interprets plain-English requests and explains schedules; it does not calculate schedules or make ML predictions. |
+| API framework | FastAPI | Creates fast, typed API endpoints between the React interface and Python planner. |
+| App server | Uvicorn | Runs the FastAPI backend in development and production. |
+| Backend | Python 3.12+ | Well suited for rule-based scheduling, CSV processing, validation, and optimisation logic. |
+| CI/CD | Google Cloud Build + Artifact Registry | Builds each pushed GitHub commit into a versioned container image and deploys it to Cloud Run. |
+| CSV handling | Python standard library | Imports the eight PS1 input files and exports the required schedule CSV files. |
+| Cloud hosting | Google Cloud Run | Hosts the Docker container as a managed public web service without maintaining virtual machines. |
+| Containerisation | Docker + Docker Compose | Makes the app reproducible: Node builds the frontend, then Python serves the production app. |
+| Database | SQLite + SQLAlchemy | Stores crew, plans, forecasts, uploaded datasets, assistant-action receipts, public reports, private photos, and the delivery queue with low setup overhead. |
+| Database portability | PostgreSQL support via `psycopg` | Lets the same SQLAlchemy data layer move to PostgreSQL later if needed. |
 | Frontend | React 19 | Builds the interactive planning dashboard, schedule views, risk simulations, crew management, and AI chat. |
 | Frontend language | TypeScript | Adds type checking to reduce frontend data and UI errors. |
 | Frontend tooling | Vite | Provides fast local development and optimised production builds. |
 | Icons | Lucide React | Supplies consistent, lightweight interface icons. |
-| Backend | Python 3.12+ | Well suited for rule-based scheduling, CSV processing, validation, and optimisation logic. |
-| API framework | FastAPI | Creates fast, typed API endpoints between the React interface and Python planner. |
-| Input validation | Pydantic | Validates scenario inputs, crew records, public reports, and assistant actions; custom Python checks validate the PS1 CSV data. |
-| Scheduling engine | Custom Python deterministic heuristic | Produces and replans A/B/C rail-access schedules while applying PS1 constraints such as buffers, capacities, ECLO, predecessors, workfronts, and co-sharing. |
-| Validation engine | Independent local Python audit | Recomputes schedule rules and checks the three exported CSVs before export. |
-| Database | SQLite + SQLAlchemy | Stores crew, plans, forecasts, uploaded datasets, assistant-action receipts, public reports, private photos, and the delivery queue with low setup overhead. |
-| Public report sync | DBStudios project API | Delivers public reports to the configured cloud table and supplies the operator inbox; photo bytes stay on the PLiZ server. |
 | Image processing | Pillow | Validates uploaded photos, resizes them, and re-encodes them without EXIF metadata. |
-| Database portability | PostgreSQL support via `psycopg` | Lets the same SQLAlchemy data layer move to PostgreSQL later if needed. |
-| AI assistant | OpenAI Responses API (`gpt-5.6-luna` by default) | Interprets plain-English requests and explains schedules; it does not calculate schedules or make ML predictions. |
-| CSV handling | Python standard library | Imports the eight PS1 input files and exports the required schedule CSV files. |
-| Testing | Pytest + HTTPX | Tests scheduling rules, API workflows, exports, assistant actions, and security behaviours. |
-| Containerisation | Docker + Docker Compose | Makes the app reproducible: Node builds the frontend, then Python serves the production app. |
-| App server | Uvicorn | Runs the FastAPI backend in development and production. |
-| Styling | Custom CSS + DM Sans / Manrope fonts | Creates the responsive PLiZ visual design without a large UI component framework. |
+| Input validation | Pydantic | Validates scenario inputs, crew records, public reports, and assistant actions; custom Python checks validate the PS1 CSV data. |
 | ML / prediction | None currently | The project has deterministic disruption simulations, not an ML prediction model. XGBoost would require labelled historical data before it should be added. |
+| Public report sync | DBStudios project API | Delivers public reports to the configured cloud table and supplies the operator inbox; photo bytes stay on the PLiZ server. |
+| Scheduling engine | Custom Python deterministic heuristic | Produces and replans A/B/C rail-access schedules while applying PS1 constraints such as buffers, capacities, ECLO, predecessors, workfronts, and co-sharing. |
+| Styling | Custom CSS + DM Sans / Manrope fonts | Creates the responsive PLiZ visual design without a large UI component framework. |
+| Testing | Pytest + HTTPX | Tests scheduling rules, API workflows, exports, assistant actions, and security behaviours. |
+| Validation engine | Independent local Python audit | Recomputes schedule rules and checks the three exported CSVs before export. |
 
 ## Run locally
 
