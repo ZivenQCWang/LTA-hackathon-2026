@@ -1,0 +1,56 @@
+{
+  "repository": "https://github.com/aochinwen/NebulaX-Hackathon-ProblemStatement",
+  "commit": "966c976005db2e3e40a691cff268fdb8f396a5df",
+  "retrieved_at": "2026-09-18T12:17:01.768909+00:00",
+  "description": "Official organiser-provided synthetic hackathon instance; not live railway operations.",
+  "files": [
+    {
+      "path": "PS1/01_data/01_LINES.csv",
+      "sha256": "b6e60b0e7726e4266efd059bf5061b3b3a2c9825ae7dd85a6431f41b81b383e7"
+    },
+    {
+      "path": "PS1/01_data/02_STATIONS.csv",
+      "sha256": "4a27d6508defd03e8c833133b523390ac8850a1c1717f309033e40f364720e24"
+    },
+    {
+      "path": "PS1/01_data/03_SECTORS.csv",
+      "sha256": "643fdb2bd317126b42572fafcce8f8108008e8e9c7b71c08dfd31cec11c3ee34"
+    },
+    {
+      "path": "PS1/01_data/04_LOCATION_SUPPLY.csv",
+      "sha256": "9d8a92d6ffd340f40dae28302ed6f88958f8661e2b046bb6b4e0b79c385be1e6"
+    },
+    {
+      "path": "PS1/01_data/05_BUFFER_LOCATION.csv",
+      "sha256": "4b9fe7fd6a1f9128bd6e83405496dc64a8028f997bb1fcd28355582a6d554de0"
+    },
+    {
+      "path": "PS1/01_data/06_PARAMETERS.csv",
+      "sha256": "9400b7b082069c56b8cae85d56994cf06fe08ae54fcd116ff6edc890034cc8e6"
+    },
+    {
+      "path": "PS1/01_data/07_PROJECT_DETAILS.csv",
+      "sha256": "393f0dcc7e7b9a54f0eff12eb0dd0122dbd74f4b4b8b73b7676f9f232fb8a4c7"
+    },
+    {
+      "path": "PS1/01_data/08_ACTIVITY_DETAILS.csv",
+      "sha256": "6a1ef90cd3bed93a8970ef49454e9c02e0c1df93ce8e0f0f4b071563cfb43e30"
+    },
+    {
+      "path": "PS1/03_submission_sample/RESULTS.csv",
+      "sha256": "b815b93c64cd429c1cd000da71e364f3bd5198356ad88b2abaf58d00ffa422cc"
+    },
+    {
+      "path": "PS1/03_submission_sample/SCHEDULE_ACCESS.csv",
+      "sha256": "fef1f07f28819804c82c8051d282fc332bb1094f24d5ebeb799c23bcbf22c843"
+    },
+    {
+      "path": "PS1/03_submission_sample/SCHEDULE_OCCUPANCY.csv",
+      "sha256": "efd33d33573d722db3f87e8d2bbc9af6fe7b6deaab504e8d97f2d7ac58116cf3"
+    },
+    {
+      "path": "PS1/PS1_README.md",
+      "sha256": "e7d8f9457e62a1732fc7986cea57ad5fbd595e7cabe2e8b789e673c8335bd253"
+    }
+  ]
+}

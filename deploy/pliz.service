@@ -1,0 +1,28 @@
+[Unit]
+Description=PLiZ railway maintenance planning demo
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pliz
+Group=pliz
+WorkingDirectory=/opt/pliz/current
+EnvironmentFile=/etc/pliz.env
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/pliz/current/.venv/bin/python -m uvicorn backend.main:app --host 127.0.0.1 --port 8016 --workers 1
+Restart=on-failure
+RestartSec=5
+StateDirectory=pliz
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/pliz
+MemoryMax=2G
+CPUQuota=200%
+
+[Install]
+WantedBy=multi-user.target

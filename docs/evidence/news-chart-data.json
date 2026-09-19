@@ -1,0 +1,29 @@
+{
+  "source_url": "https://www.channelnewsasia.com/singapore/circle-line-ccl-disruption-3-month-shuttle-buses-train-faq-5863851",
+  "published": "2026-01-17",
+  "updated": "2026-01-23",
+  "data_type": "Published expected service intervals during planned maintenance; not observed outcomes",
+  "unit": "minutes between trains",
+  "values": [
+    {
+      "section": "HarbourFront to Paya Lebar\n(peak hours)",
+      "usual_minutes": 2,
+      "reported_works_minutes": 3
+    },
+    {
+      "section": "Paya Lebar to Mountbatten\n(shuttle during works)",
+      "usual_minutes": 3,
+      "reported_works_minutes": 10
+    },
+    {
+      "section": "Mountbatten to Dhoby Ghaut\nor Marina Bay",
+      "usual_minutes": 6,
+      "reported_works_minutes": 10
+    }
+  ],
+  "caveats": [
+    "Usual and works services differ; the central section uses a shuttle.",
+    "This is a historical announced plan, not current service information.",
+    "No PLiZ results or time savings are represented."
+  ]
+}
