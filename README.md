@@ -109,7 +109,6 @@ Forecasts measure disruption impacts, **not equipment-failure probabilities**. T
 | Icons | Lucide React | Supplies consistent, lightweight interface icons. |
 | Image processing | Pillow | Validates uploaded photos, resizes them, and re-encodes them without EXIF metadata. |
 | Input validation | Pydantic | Validates scenario inputs, crew records, public reports, and assistant actions; custom Python checks validate the PS1 CSV data. |
-| ML / prediction | None currently | The project has deterministic disruption simulations, not an ML prediction model. XGBoost would require labelled historical data before it should be added. |
 | Public report sync | DBStudios project API | Delivers public reports to the configured cloud table and supplies the operator inbox; photo bytes stay on the PLiZ server. |
 | Scheduling engine | Custom Python deterministic heuristic | Produces and replans A/B/C rail-access schedules while applying PS1 constraints such as buffers, capacities, ECLO, predecessors, workfronts, and co-sharing. |
 | Styling | Custom CSS + DM Sans / Manrope fonts | Creates the responsive PLiZ visual design without a large UI component framework. |
