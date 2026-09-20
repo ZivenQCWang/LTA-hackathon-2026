@@ -8,7 +8,7 @@ Built for [NebulaX Problem Statement 1: Railway Track Access Optimisation](https
 
 [Repository](https://github.com/Pskm12E/Nus_Hackathon) · [Deployment](docs/DEPLOYMENT.md) · [Planner details](docs/ARCHITECTURE.md) · [Proposal draft](SUBMISSION.md) · [Requirement review](docs/REQUIREMENTS_REVIEW.md)
 
-**[Open the live demo](https://pliz.4bytedigi.com)** — no login required.
+**[Open the live demo](https://pliz-256257918754.asia-southeast1.run.app/)** — no login required.
 
 ![PLiZ overview with the supplied logo](docs/images/pliz-overview.png)
 
@@ -20,7 +20,7 @@ PLiZ brings requests, schedules, crew and disruption analysis into one workspace
 
 ## Features
 
-**PLiZ Public:** a separate mobile app at [`/public/`](http://127.0.0.1:5173/public/) for taking photos, submitting issue reports and revisiting saved reports. Reports are delivered to DBStudios and displayed in the main workspace's **Public's report** inbox. See the [public app guide](docs/PUBLIC_APP.md) and [DBStudios setup](docs/DBSTUDIOS_REPORTS.md). Reports do not automatically dispatch crews.
+**PLiZ Public:** a separate mobile app at [`/public/`](https://pliz-256257918754.asia-southeast1.run.app/public/) for taking photos, submitting issue reports and revisiting saved reports. Reports are delivered to DBStudios and displayed in the main workspace's **Public's report** inbox. See the [public app guide](docs/PUBLIC_APP.md) and [DBStudios setup](docs/DBSTUDIOS_REPORTS.md). Reports do not automatically dispatch crews.
 
 | Workspace | What it does |
 |---|---|
@@ -121,8 +121,8 @@ Forecasts measure disruption impacts, **not equipment-failure probabilities**. T
 Prerequisites: **Python 3.12+** and **Node.js 22+**.
 
 ```powershell
-git clone https://github.com/Pskm12E/Nus_Hackathon.git
-cd Nus_Hackathon
+git clone https://github.com/ZivenQCWang/LTA-hackathon-2026.git
+cd LTA-hackathon-2026
 python -m venv .venv
 ./.venv/Scripts/python.exe -m pip install -r requirements.txt
 npm ci
