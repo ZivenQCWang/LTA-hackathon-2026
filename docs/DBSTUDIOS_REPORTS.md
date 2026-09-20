@@ -17,7 +17,7 @@ Never put the key in a `VITE_` variable or commit it. Both DBStudios values may 
 
 The current service key is named **PLiZ public reports service**, created on 19 September 2026 with a 90-day lifetime. Renew it before expiry around 18 December 2026, update the private server environment and restart PLiZ. Project keys require read/write access. They do not manage schema or project sharing.
 
-Production always requires operator authentication for the inbox and its photographs, even with `PLIZ_PUBLIC_DEMO=true`. The public submission app remains accessible in that mode. Local development follows the existing localhost access policy.
+With `PLIZ_PUBLIC_DEMO=true`, submissions, the inbox and its photographs are accessible without signing in: anyone with the demo link can view submitted reports and locations. With `PLIZ_PUBLIC_DEMO=false`, production requires operator authentication for the inbox and photos, even when `PLIZ_PUBLIC_READONLY=true`. Local development follows the existing localhost access policy.
 
 ## Table schema
 
@@ -33,7 +33,7 @@ DBStudios adds `id`, `_version` and `created_at` automatically. The adapter uses
 | `status` | text | Initially received |
 | `submitted_at` | text | UTC ISO timestamp from PLiZ |
 | `photo_count` | integer | Number of attached photos |
-| `photo_paths` | text | JSON array of protected relative PLiZ photo endpoints |
+| `photo_paths` | text | JSON array of relative PLiZ photo endpoints, following the inbox access mode |
 | `latitude`, `longitude` | decimal | Approximate coordinates, limited by DBStudios to two decimal places |
 | `gps_coordinates` | text | JSON pair preserving the submitted coordinate precision; nulls when absent |
 
@@ -51,7 +51,7 @@ Run **one Uvicorn worker**. The process lock serialises deliveries and the UUID 
 
 The inbox caches cloud rows for up to 25 seconds and refreshes its visible page every 30 seconds. It loads DBStudios pages before filtering and supports up to 2,000 reports in this demo. Above that limit it shows an explicit error rather than silently hiding rows; use DBStudios directly until server-side paginated filtering is implemented.
 
-**Photo bytes remain on PLiZ**, served only to the submitting browser or an authenticated operator. DBStudios stores the protected paths. Back up `/var/lib/pliz/pliz.db` with SQLite's online backup API: it holds reports, photographs and pending deliveries. The DBStudios table alone is not a complete backup. Submitted reports do not automatically create jobs or dispatch crews.
+**Photo bytes remain on PLiZ**. The submitting browser can view its own photos; the inbox photo endpoints are public in public-demo mode and require operator authentication in private production mode. DBStudios stores these paths. Back up `/var/lib/pliz/pliz.db` with SQLite's online backup API: it holds reports, photographs and pending deliveries. The DBStudios table alone is not a complete backup. Submitted reports do not automatically create jobs or dispatch crews.
 
 ## Deployment and checks
 
@@ -61,7 +61,7 @@ After activation, verify:
 
 - `/public/` loads over HTTPS and a clearly fictional report receives a delivered receipt.
 - NightShift AI's `public_reports` table contains the same reference exactly once.
-- **Public's report** requests an operator login, displays that reference and opens its photos after sign-in.
-- Anonymous requests to `/api/operator/reports` return 401; existing planning health remains good.
+- In public-demo mode, **Public's report** opens directly, displays that reference and opens its photos without signing in. Anonymous `/api/operator/reports` requests return 200.
+- In private production mode, anonymous inbox and photo requests return 401, and valid operator credentials grant access. Existing planning health remains good.
 
 Keep configuration patches and operator credentials in ignored `deploy/private/` or a private server directory, never in GitHub. A text-only fictional integration record may remain in the table as evidence of the test.

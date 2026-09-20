@@ -4,7 +4,7 @@ Live demo: **https://pliz.4bytedigi.com**, hosted on 4bytedigi.
 
 Activated on 19 September 2026 (Singapore time). Public HTTPS, all three planning scenarios, and a read-only AI response were verified. The service is enabled to start at boot. Each scenario scheduled all 54 activities with no remaining workload and passed the app's local audit; this is not official judge validation.
 
-The planning demo has no login and uses synthetic inputs and fictional crew. Visitors edit the same workspace. The public reporting app lives at `/public/`; its **Public's report** staff inbox and photos require operator authentication in production. Real operational use needs individual identities and permissions.
+The planning demo has no login and uses synthetic inputs and fictional crew. Visitors edit the same workspace. The public reporting app lives at `/public/`. With `PLIZ_PUBLIC_DEMO=true`, anyone with the demo link can open **Public's report** and view submitted reports, locations and photos without signing in. Private production deployments require operator authentication. Real operational use needs individual identities and permissions.
 
 ## Runtime
 
@@ -38,7 +38,7 @@ The minute limit is per connection address; the rolling daily limit is shared ac
 
 Optional private mode: `PLIZ_PUBLIC_DEMO=false`, `PLIZ_AUTH_USERNAME`, and a `PLIZ_AUTH_PASSWORD` of at least 16 characters. `PLIZ_PUBLIC_READONLY=true` then allows public viewing while protecting writes and chat receipts with HTTP Basic authentication. Hosted origins require HTTPS.
 
-For public reporting, both DBStudios values must be set together, and the operator password must have at least 16 characters. Existing public-demo mode keeps public submissions available while the report inbox checks operator credentials independently. See [DBStudios reports](DBSTUDIOS_REPORTS.md) for the table schema, queue, photo storage and update installer.
+For public reporting, both DBStudios values must be set together. Public-demo mode opens submissions, the report inbox and its photos without credentials. Private production mode requires an operator password of at least 16 characters, including for inbox reads when `PLIZ_PUBLIC_READONLY=true`. See [DBStudios reports](DBSTUDIOS_REPORTS.md) for the table schema, queue, photo storage and update installer.
 
 ## Install on 4bytedigi
 

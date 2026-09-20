@@ -555,9 +555,10 @@ export default function PublicApp() {
                     <div className="pub-inline-note">
                       <Info size={18} />
                       <span>
-                        Your report, photos and any attached location will be
-                        available to the PLiZ operations team for review. This
-                        demo does not automatically dispatch a crew.
+                        Your report, photos and any attached location appear in
+                        the operations inbox. In public demo mode, anyone with
+                        the demo link can view them. This demo does not
+                        automatically dispatch a crew.
                       </span>
                     </div>
                     {error && (

@@ -1,4 +1,4 @@
-"""Authenticated staff view over the same reports written by the public app."""
+"""Report inbox: public in demo mode, authenticated in private deployments."""
 import os
 from typing import Annotated, Literal
 from uuid import UUID
@@ -16,10 +16,12 @@ from . import dbstudios
 
 def require_operator(request: Request):
     # Local development follows the existing localhost workspace access policy.
-    # A publicly accessible demo must not expose uploaded reports anonymously.
     if os.getenv('PLIZ_ENV', 'development') != 'production':
         return
     guard: DemoGuard = request.app.state.security
+    # Explicit public-demo mode opens the inbox and photos with the workspace.
+    if guard.public_demo:
+        return
     if not guard.username or len(guard.password) < 16:
         raise HTTPException(503, 'Operator access is not configured. Set PLIZ_AUTH_USERNAME and PLIZ_AUTH_PASSWORD on the server.')
     if not guard.authorised(request.headers.get('authorization', '')):

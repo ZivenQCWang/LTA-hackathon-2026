@@ -149,7 +149,7 @@ SQLite stores crew, overrides, plans, forecasts and action receipts in `storage/
 
 See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the 4bytedigi service and optional Docker setup.
 
-The planning workspace is a **public shared demo without a login**. Visitors can change the same synthetic workspace. The **Public's report** inbox and its photos require an operator login in production. Server-side AI limits constrain requests; secrets and runtime databases are excluded from Git.
+The planning workspace is a **public shared demo without a login**. Visitors can change the same synthetic workspace. With `PLIZ_PUBLIC_DEMO=true`, **Public's report** also opens directly: anyone with the demo link can view submitted reports, locations and photos. Private production deployments require an operator login. Server-side AI limits constrain requests; secrets and runtime databases are excluded from Git.
 
 ## Verify
 

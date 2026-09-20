@@ -82,11 +82,11 @@ All public endpoints require an **`X-Report-Key`** header (32–128 characters).
 | `GET /api/public/reports`                        | Up to 100 most recent reports owned by the supplied browser key |
 | `GET /api/public/reports/{id}/photos/{photo_id}` | Read a photograph belonging to that browser's report            |
 
-The staff endpoints are `GET /api/operator/reports?q=&category=&page=1` and `GET /api/operator/reports/{id}/photos/{photo_id}`. Production requires the configured operator credentials, including when the planning workspace is a public demo. The inbox keeps entered credentials in memory only.
+The inbox endpoints are `GET /api/operator/reports?q=&category=&page=1` and `GET /api/operator/reports/{id}/photos/{photo_id}`. With `PLIZ_PUBLIC_DEMO=true`, anyone with the demo link can view reports, attached locations and photos without signing in. Private production deployments require the configured operator credentials, including when `PLIZ_PUBLIC_READONLY=true`. The inbox keeps entered credentials in memory only.
 
 The `report` JSON contains `request_id` (UUID), `category`, `location`, `description`, and optional paired `latitude`/`longitude`. The client reuses its request ID when retrying a failed submission. Identical retries return the original receipt; attempts to reuse it with different content or ownership are rejected.
 
-Reports and JPEG image bytes are saved in `pliz_public_reports` and `pliz_public_report_photos` in the existing application database. `pliz_public_report_deliveries` tracks delivery attempts. With DBStudios configured, report text, category, location, reference, optional GPS and protected photo paths are delivered to its `public_reports` table. Photo bytes remain on PLiZ. Back up SQLite to retain photographs and the delivery queue; DBStudios alone cannot restore them. See [DBStudios reports](DBSTUDIOS_REPORTS.md).
+Reports and JPEG image bytes are saved in `pliz_public_reports` and `pliz_public_report_photos` in the existing application database. `pliz_public_report_deliveries` tracks delivery attempts. With DBStudios configured, report text, category, location, reference, optional GPS and inbox photo paths are delivered to its `public_reports` table. These photo endpoints follow the configured inbox access mode. Photo bytes remain on PLiZ. Back up SQLite to retain photographs and the delivery queue; DBStudios alone cannot restore them. See [DBStudios reports](DBSTUDIOS_REPORTS.md).
 
 No uploaded photographs are placed in the repository or a public asset folder. The report reference is a display identifier, not an access credential; clearing browser storage or changing devices loses access. Cross-device recovery and accounts are not implemented.
 

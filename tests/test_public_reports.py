@@ -208,10 +208,35 @@ def test_db_studios_timeout_after_insert_is_idempotent(client, monkeypatch):
     assert len(rows) == 1
 
 
-def test_operator_production_access_is_protected_even_in_public_demo(client, monkeypatch):
+@pytest.mark.parametrize('cloud_storage', [False, True])
+def test_public_demo_opens_inbox_and_photos_without_login(client, monkeypatch, cloud_storage):
+    if cloud_storage:
+        mock_dbstudios(monkeypatch)
+    monkeypatch.setenv('PLIZ_ENV', 'production')
+    monkeypatch.setattr(app.state.security, 'production', True)
+    monkeypatch.setattr(app.state.security, 'public_demo', True)
+    monkeypatch.setattr(app.state.security, 'username', '')
+    monkeypatch.setattr(app.state.security, 'password', '')
+    report = submit(client, photos=[('photos', ('test.jpg', image_bytes(), 'image/jpeg'))]).json()
+    inbox = client.get('/api/operator/reports')
+    assert inbox.status_code == 200
+    assert inbox.json()['reports'][0]['reference'] == report['reference']
+    assert inbox.headers['cache-control'] == 'no-store'
+    if cloud_storage:
+        assert inbox.json()['storage']['destination'] == 'dbstudios'
+    photo = client.get(f"/api/operator/reports/{report['id']}/photos/{report['photo_ids'][0]}")
+    assert photo.status_code == 200
+    assert photo.headers['content-type'] == 'image/jpeg'
+    assert photo.headers['cache-control'] == 'no-store'
+
+
+@pytest.mark.parametrize('public_readonly', [False, True])
+def test_private_production_inbox_and_photos_require_login(client, monkeypatch, public_readonly):
     report = submit(client, photos=[('photos', ('test.jpg', image_bytes(), 'image/jpeg'))]).json()
     monkeypatch.setenv('PLIZ_ENV', 'production')
-    monkeypatch.setattr(app.state.security, 'public_demo', True)
+    monkeypatch.setattr(app.state.security, 'production', True)
+    monkeypatch.setattr(app.state.security, 'public_demo', False)
+    monkeypatch.setattr(app.state.security, 'public_readonly', public_readonly)
     monkeypatch.setattr(app.state.security, 'username', 'operator')
     monkeypatch.setattr(app.state.security, 'password', 'test-only-operator-password')
     photo_path = f"/api/operator/reports/{report['id']}/photos/{report['photo_ids'][0]}"
@@ -220,6 +245,8 @@ def test_operator_production_access_is_protected_even_in_public_demo(client, mon
     assert client.get('/api/operator/reports', auth=('operator', 'wrong')).status_code == 401
     assert client.get('/api/operator/reports', auth=('operator', 'test-only-operator-password')).status_code == 200
     assert client.get(photo_path, auth=('operator', 'test-only-operator-password')).status_code == 200
+    # Let read requests reach the endpoint's own configuration check.
+    monkeypatch.setattr(app.state.security, 'public_readonly', True)
     monkeypatch.setattr(app.state.security, 'password', '')
     assert client.get('/api/operator/reports').status_code == 503
 
