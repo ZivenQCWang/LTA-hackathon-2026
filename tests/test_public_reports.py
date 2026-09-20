@@ -280,6 +280,21 @@ def test_db_studios_inbox_searches_later_cloud_pages(client, monkeypatch):
     assert report['delivery_status'] == 'delivered'
 
 
+def test_inbox_sees_reports_from_another_instance_on_next_poll(client, monkeypatch):
+    from backend.public_reports import dbstudios
+    rows = mock_dbstudios(monkeypatch)
+    submit(client)
+    monkeypatch.setattr(dbstudios.time, 'monotonic', lambda: 100.0)
+    assert client.get('/api/operator/reports').json()['total'] == 1
+    # A report written by another server does not invalidate this process's cache.
+    rows.append({**rows[0], 'report_id': str(uuid4()), 'reference': 'PLZ-ANOTHER-INSTANCE'})
+    assert client.get('/api/operator/reports').json()['total'] == 1
+    monkeypatch.setattr(dbstudios.time, 'monotonic', lambda: 102.0)
+    inbox = client.get('/api/operator/reports').json()
+    assert inbox['total'] == 2
+    assert any(report['reference'] == 'PLZ-ANOTHER-INSTANCE' for report in inbox['reports'])
+
+
 def test_db_studios_inbox_limit_is_explicit(client, monkeypatch):
     from backend.public_reports import dbstudios
     mock_dbstudios(monkeypatch)

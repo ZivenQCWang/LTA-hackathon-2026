@@ -88,7 +88,7 @@ def snapshot():
     """Short cache bounds API usage; fetch every page, never silently truncate."""
     global _snapshot, _snapshot_time
     with _snapshot_lock:
-        if _snapshot is not None and time.monotonic() - _snapshot_time < 25:
+        if _snapshot is not None and time.monotonic() - _snapshot_time < 1:
             return _snapshot
         first = request('GET', '/tables/public_reports?page=1')
         total, page_size = int(first['total']), int(first['pageSize'])

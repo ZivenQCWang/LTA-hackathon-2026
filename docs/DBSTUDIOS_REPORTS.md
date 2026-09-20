@@ -49,7 +49,7 @@ The table was created through DBStudios because project API keys cannot create s
 
 Run **one Uvicorn worker**. The process lock serialises deliveries and the UUID check handles retries after a lost response. This is not a multi-host exactly-once guarantee: the DBStudios table currently has no custom unique constraint. Add a database uniqueness constraint and coordinated workers before scaling to multiple instances.
 
-The inbox caches cloud rows for up to 25 seconds and refreshes its visible page every 30 seconds. It loads DBStudios pages before filtering and supports up to 2,000 reports in this demo. Above that limit it shows an explicit error rather than silently hiding rows; use DBStudios directly until server-side paginated filtering is implemented.
+The inbox polls every 2 seconds while visible, skips overlapping requests and refreshes immediately when returning to the tab. Cloud rows are cached for at most 1 second; successful submissions invalidate that cache immediately. It loads DBStudios pages before filtering and supports up to 2,000 reports in this demo. Above that limit it shows an explicit error rather than silently hiding rows; use DBStudios directly until server-side paginated filtering is implemented.
 
 **Photo bytes remain on PLiZ**. The submitting browser can view its own photos; the inbox photo endpoints are public in public-demo mode and require operator authentication in private production mode. DBStudios stores these paths. Back up `/var/lib/pliz/pliz.db` with SQLite's online backup API: it holds reports, photographs and pending deliveries. The DBStudios table alone is not a complete backup. Submitted reports do not automatically create jobs or dispatch crews.
 

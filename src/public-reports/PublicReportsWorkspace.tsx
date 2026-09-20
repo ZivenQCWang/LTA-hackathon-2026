@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -41,9 +41,11 @@ export default function PublicReportsWorkspace() {
   const [authorization, setAuthorization] = useState("");
   const [selected, setSelected] = useState<PublicReport | null>(null);
   const [updated, setUpdated] = useState("");
+  const requestInFlight = useRef(false);
 
   useEffect(() => {
     const controller = new AbortController();
+    requestInFlight.current = true;
     const params = new URLSearchParams({ page: String(page), q: query });
     if (category) params.set("category", category);
     setLoading(true);
@@ -58,6 +60,7 @@ export default function PublicReportsWorkspace() {
           new Date().toLocaleTimeString("en-SG", {
             hour: "2-digit",
             minute: "2-digit",
+            second: "2-digit",
           }),
         );
       })
@@ -75,18 +78,29 @@ export default function PublicReportsWorkspace() {
         );
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) {
+          requestInFlight.current = false;
+          setLoading(false);
+        }
       });
-    return () => controller.abort();
+    return () => {
+      controller.abort();
+      requestInFlight.current = false;
+    };
   }, [authorization, query, category, page, refresh]);
 
   useEffect(() => {
     if (needsLogin) return;
-    const timer = window.setInterval(() => {
-      if (document.visibilityState === "visible")
+    const refreshVisibleInbox = () => {
+      if (document.visibilityState === "visible" && !requestInFlight.current)
         setRefresh((value) => value + 1);
-    }, 30000);
-    return () => window.clearInterval(timer);
+    };
+    const timer = window.setInterval(refreshVisibleInbox, 2000);
+    document.addEventListener("visibilitychange", refreshVisibleInbox);
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", refreshVisibleInbox);
+    };
   }, [needsLogin]);
 
   return (
@@ -356,7 +370,7 @@ export default function PublicReportsWorkspace() {
                     ? "DBStudios · NightShift AI / public_reports"
                     : "Local workspace database"}
                 </span>
-                <span>Updated {updated} · Refreshes every 30 seconds</span>
+                <span>Updated {updated} · Refreshes every 2 seconds</span>
                 {authorization && (
                   <button
                     onClick={() => {
